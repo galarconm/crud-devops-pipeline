@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.log

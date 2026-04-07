@@ -1,35 +1,43 @@
 name: CI Pipeline
 
+# When to run this workflow
 on:
   push:
-    branches: [main]
+    branches: [main] # Run when code is pushed to main
   pull_request:
-    branches: [main]
+    branches: [main] # Run when a Pull Request targets main
 
+#What to do when the workflow is triggered
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Download your code onto the virtual machine
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Install Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Step 3: Cache dependencies (speeds up future runs)
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
+      # Step 4: Install dependencies
       - name: Install dependencies
         run: cd backend && npm ci
 
+      # Step 5: Run tests
       - name: Run tests
         run: cd backend && npm test
 
+      # Step 6: Run linter (checks code style)
       - name: Run linter
         run: cd backend && npm run lint

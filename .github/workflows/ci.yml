@@ -54,3 +54,7 @@ jobs:
           exit-code: '1' #Exit with code 1 if vulnerabilities are found
           ignore-unfixed: true #Skip issues with no fix available
           severity: 'CRITICAL,HIGH' #Only fail on serious issues
+      
+      # Step 8: Check for hard-coded secrets
+      - name: Check for hard-coded secrets
+        run: bash scripts/check-secrets.sh

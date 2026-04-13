@@ -12,8 +12,8 @@ data:
     remote_write:
       - url: https://prometheus-prod-66-prod-us-east-3.grafana.net/api/prom/push
         basic_auth:
-          username: 3103304
-          password: 
+          username: <USERNAME>
+          password: <PASSWORD>
 
     rule_files:
       - /etc/prometheus/alerts.yml

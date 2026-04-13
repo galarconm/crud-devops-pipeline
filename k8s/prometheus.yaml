@@ -13,7 +13,7 @@ data:
       - url: https://prometheus-prod-66-prod-us-east-3.grafana.net/api/prom/push
         basic_auth:
           username: <USERNAME>
-          password: <PASSWORD>
+          password: <PASSWORD> # Reemplaza con tu API key de Grafana Cloud
 
     rule_files:
       - /etc/prometheus/alerts.yml

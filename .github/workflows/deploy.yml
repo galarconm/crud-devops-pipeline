@@ -7,8 +7,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Only run this job if the CI pipeline succeeded
-    #needs: build
+    # Only run this job if the  CI pipeline succeeded ci.yml
+    needs: build
+    if: success()
+  
 
     steps:
       #Step 1: Download code

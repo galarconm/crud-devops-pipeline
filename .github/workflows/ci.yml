@@ -41,3 +41,17 @@ jobs:
       # Step 6: Run linter (checks code style)
       - name: Run linter
         run: cd backend && npm run lint
+
+      # Step 7: Scan the Docker image for vulnerabilities using Trivy
+      - name: Build image for scanning
+        run: docker build -t crud-backend:latest ./backend
+
+      - name: Run Trivy vulnerabilities Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: crud-backend:latest
+          format: 'table' #Human-readable output
+          exit-code: '1' #Exit with code 1 if vulnerabilities are found
+          ignore-unfixed: true #Skip issues with no fix available
+          severity: 'CRITICAL, HIGH' #Only fail on serious issues
+          

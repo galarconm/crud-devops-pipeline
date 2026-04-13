@@ -53,5 +53,4 @@ jobs:
           format: 'table' #Human-readable output
           exit-code: '1' #Exit with code 1 if vulnerabilities are found
           ignore-unfixed: true #Skip issues with no fix available
-          severity: 'CRITICAL, HIGH' #Only fail on serious issues
-          
+          severity: 'CRITICAL,HIGH' #Only fail on serious issues

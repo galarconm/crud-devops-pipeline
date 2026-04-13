@@ -24,4 +24,4 @@ jobs:
       # Step 3: Run the analysis
       - name: Analyze
         uses: github/codeql-action/analyze@v2
-        #Results appear in Github under Security > Code scanning alerts
+        # Results appear in Github under Security > Code scanning alerts

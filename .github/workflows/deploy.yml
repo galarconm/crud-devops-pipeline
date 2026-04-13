@@ -47,7 +47,8 @@ jobs:
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/crud-backend:latest
 
       # Step 5: Restart the K8s deployment (zero downtime)
-      - name: Deploy to Kubernetes
-        run: kubectl rollout restart deployment/crud-backend
+      #- name: Deploy to Kubernetes
+      #  run: kubectl rollout restart deployment/crud-backend
+      #Nota: configurar despues para deploy en EKS, por ahora se deja asi para no complicar el pipeline
 
           

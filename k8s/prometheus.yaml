@@ -1,0 +1,106 @@
+#prometheus
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s # Cada cuanto tiempo Prometheus va a recolectar las métricas
+      evaluation_interval: 15s # Cada cuanto tiempo se evalúan las reglas
+
+    remote_write:
+      - url: https://prometheus-prod-66-prod-us-east-3.grafana.net/api/prom/push
+        basic_auth:
+          username: 3103304
+          password: REDACTED
+
+    rule_files:
+      - /etc/prometheus/alerts.yml
+
+    scrape_configs: # esto es lo que le dice a Prometheus donde buscar las métricas
+      - job_name: 'crud-backend'
+        metrics_path: /metrics # Endpoint donde tu app expone las métricas
+        static_configs:
+          - targets: ['crud-backend-svc:80'] #Your app's service name
+      
+      - job_name: 'kube-state-metrics'
+        metrics_path: /metrics
+        static_configs:
+          - targets: ['kube-state-metrics.default.svc.cluster.local:8080'] # Servicio de kube-state-metrics
+
+  alerts.yml: |
+    groups:
+      - name: crud-backend-alerts
+        rules:
+
+          #Alerta 1: El pod está caído
+          - alert: PodDown
+            expr: up{job="crud-backend"} == 0
+            for: 1m # Espera 1 minuto antes de disparar la alerta para evitar falsos positivos
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod {{ $labels.pod }} is down"
+              description: "The pod {{ $labels.pod }} has not been responding for more than 1 minute."
+
+          # Alerta 2: El pod reinicia muchas veces (crash loop)
+          - alert: PodRestartingTooMuch
+            expr: increase(kube_pod_container_status_restarts_total[15m]) > 3
+            for: 5m # Espera 5 minutos para confirmar que el pod está en crash loop
+            labels:
+              severity: warning
+            annotations:
+              summary: "Pod {{ $labels.pod }} is restarting too much"
+              description: "The pod {{ $labels.pod }} has restarted more than 3 times in the last 15 minutes, which may indicate a crash loop."
+
+          # Alerta 4: Alta tasa de errores HTTP
+          - alert: HighErrorRate
+            expr: rate(http_requests_total[5m]) > 0.05
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Alta tasa de errores HTTP"
+              description: "Mas del 5% de los requests estan fallando."
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus/
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-svc
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090

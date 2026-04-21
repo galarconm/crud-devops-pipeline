@@ -47,7 +47,7 @@ resource "aws_instance" "backend" {
         DB_HOST=$(echo $SECRET | python3 -c "import sys, json; print(json.load(sys.stdin)['host'])")
         DB_USER=$(echo $SECRET | python3 -c "import sys, json; print(json.load(sys.stdin)['username'])")
         DB_PASS=$(echo $SECRET | python3 -c "import sys, json; print(json.load(sys.stdin)['password'])")
-        DB_NAME=$(echo $SECRET | python3 -c "import sys, json; print(json.load(sys.stdin)['dbname'])"
+        DB_NAME=$(echo $SECRET | python3 -c "import sys, json; print(json.load(sys.stdin)['dbname'])")
 
         cd /home/ubuntu
         git clone https://github.com/galarconm/crud-devops-pipeline.git app

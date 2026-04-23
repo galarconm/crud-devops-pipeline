@@ -10,19 +10,19 @@ terraform {
     workspaces {
       name = "crud-devops-pipeline"
     }
-    
+
   }
 }
 
 provider "render" {
-  api_key = var.render_api_key
+  api_key  = var.render_api_key
   owner_id = var.render_owner_id
 }
 
 resource "render_web_service" "web_app" {
-  name           = "crud-devops-app"  # Name of your app on Render
-  plan           = "starter"           # Free tier plan
-  region         = "oregon"            # required by provider (choose appropriate region)
+  name           = "crud-devops-app" # Name of your app on Render
+  plan           = "starter"         # Free tier plan
+  region         = "oregon"          # required by provider (choose appropriate region)
   root_directory = "backend"
 
   # Optional: command that starts your app inside the container
@@ -34,7 +34,7 @@ resource "render_web_service" "web_app" {
       branch          = "main"
       context         = "."
       dockerfile_path = "Dockerfile"
-      auto_deploy     = true                 # Enable auto-deploy on push       
+      auto_deploy     = true # Enable auto-deploy on push       
     }
   }
 }

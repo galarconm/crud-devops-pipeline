@@ -1,34 +1,34 @@
 variable "project_name" {
-    description = "The name of the project to which the secrets belong."
-    type        = string
-  
+  description = "The name of the project to which the secrets belong."
+  type        = string
+
 }
 
 variable "environment" {
-    description = "The environment (e.g., dev, staging, prod) for which the secrets are being created."
-    type        = string
-  
+  description = "The environment (e.g., dev, staging, prod) for which the secrets are being created."
+  type        = string
+
 }
 
 variable "db_username" {
-    description = "The username for the database."
-    type        = string
+  description = "The username for the database."
+  type        = string
 }
 
 variable "db_password" {
-    description = "The password for the database."
-    type        = string
-    sensitive = true
+  description = "The password for the database."
+  type        = string
+  sensitive   = true
 }
 
 variable "db_host" {
-    description = "The host address of the database."
-    type        = string
-  
+  description = "The host address of the database."
+  type        = string
+
 }
 
 variable "db_name" {
-    description = "The name of the database."
-    type        = string
-  
+  description = "The name of the database."
+  type        = string
+
 }

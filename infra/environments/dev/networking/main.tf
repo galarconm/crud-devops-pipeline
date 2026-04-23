@@ -13,16 +13,16 @@ provider "aws" {
   region = "us-east-1"
   default_tags {
     tags = {
-      Project = "crud-pipeline"
+      Project     = "crud-pipeline"
       Environment = "dev"
-      ManagedBy = "Terraform"
+      ManagedBy   = "Terraform"
     }
-    
+
   }
 }
 
 locals {
-  name = "crud-devops-pipeline"
+  name        = "crud-devops-pipeline"
   environment = "dev"
 }
 
@@ -42,9 +42,9 @@ module "sg" {
 
   project_name = local.name
   environment  = local.environment
-  vpc_id      = module.vpc.vpc_id
-  your_ip = var.your_ip #"212.104.181.149" # Replace with your actual IP address
-  
+  vpc_id       = module.vpc.vpc_id
+  your_ip      = var.your_ip #"212.104.181.149" # Replace with your actual IP address
+
 }
 
 terraform {

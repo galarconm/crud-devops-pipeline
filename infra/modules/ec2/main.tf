@@ -1,11 +1,11 @@
 data "aws_ami" "ubuntu" {
-    most_recent = true
-    owners = ["099720109477"] # Canonical
-    filter {
-      name = "name"
-      values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-    }
-    
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
 }
 
 locals {
@@ -13,25 +13,25 @@ locals {
 }
 
 resource "aws_instance" "bastion" {
-    ami = data.aws_ami.ubuntu.id
-    instance_type = var.instance_type
-    subnet_id = var.public_subnet_ids[0]
-    vpc_security_group_ids = [var.bastion_sg_id]
-    key_name = var.key_name
-    tags = {
-        Name = "${local.name}-bastion"
-    }
-  
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  subnet_id              = var.public_subnet_ids[0]
+  vpc_security_group_ids = [var.bastion_sg_id]
+  key_name               = var.key_name
+  tags = {
+    Name = "${local.name}-bastion"
+  }
+
 }
 
 resource "aws_instance" "backend" {
-    ami = data.aws_ami.ubuntu.id
-    instance_type = var.instance_type
-    subnet_id = var.private_subnet_ids[0]
-    vpc_security_group_ids = [var.backend_sg_id]
-    key_name = var.key_name
-    iam_instance_profile = var.instance_profile_name
-    user_data = base64encode(<<-USERDATA
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  subnet_id              = var.private_subnet_ids[0]
+  vpc_security_group_ids = [var.backend_sg_id]
+  key_name               = var.key_name
+  iam_instance_profile   = var.instance_profile_name
+  user_data = base64encode(<<-USERDATA
         #!/bin/bash
         apt-get update -y
         curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
@@ -56,10 +56,10 @@ resource "aws_instance" "backend" {
             pm2 start index.js --name crud-backend
         pm2 startup && pm2 save
     USERDATA          
-    )
+  )
 
-    tags = {
-      Name = "${local.name}-backend"
-    }
-  
+  tags = {
+    Name = "${local.name}-backend"
+  }
+
 }

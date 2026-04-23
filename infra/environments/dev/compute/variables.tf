@@ -1,7 +1,7 @@
 variable "alert_email" {
 
-    description = "Email address for Cloudwatch alarma notification"
-    type        = string
-  
+  description = "Email address for Cloudwatch alarma notification"
+  type        = string
+
 }
 

@@ -32,19 +32,19 @@ jobs:
 
       # Step 4: Install dependencies
       - name: Install dependencies
-        run: cd backend && npm ci
+        run: cd apps/backend && npm ci
 
       # Step 5: Run tests
       - name: Run tests
-        run: cd backend && npm test
+        run: cd apps/backend && npm test
 
       # Step 6: Run linter (checks code style)
       - name: Run linter
-        run: cd backend && npm run lint
+        run: cd apps/backend && npm run lint
 
       # Step 7: Scan the Docker image for vulnerabilities using Trivy
       - name: Build image for scanning
-        run: docker build -t crud-backend:latest ./backend
+        run: docker build -t crud-backend:latest ./apps/backend
 
       - name: Run Trivy vulnerabilities Scan
         uses: aquasecurity/trivy-action@master

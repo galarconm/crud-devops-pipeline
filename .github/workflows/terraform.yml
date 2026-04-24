@@ -17,6 +17,11 @@ env:
   AWS_REGION: us-east-1
   TF_VERSION: 1.12.2
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write  
+
 jobs:
   plan-networking:
     name: Plan - networking
